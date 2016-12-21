@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +56,10 @@ public class MyAdapter extends BaseAdapter {
             this.mListener = itemOncliclikListener;
     }
 
+    public void setRightWidth(int rightWidth) {
+        this.rightWidth = rightWidth;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int currPosition = position;
@@ -67,8 +73,28 @@ public class MyAdapter extends BaseAdapter {
         }else{
             views = (View[])convertView.getTag();
         }
+       LinearLayout.LayoutParams lpr = new LinearLayout.LayoutParams(rightWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+        views[0].setLayoutParams(lpr);
+        ((TextView)views[3]).setText(arrayList.get(position).get("id"));
+        ((TextView)views[4]).setText(arrayList.get(position).get("name"));
+        ((TextView)views[5]).setText(arrayList.get(position).get("sex"));
+        ((TextView)views[6]).setText(arrayList.get(position).get("age"));
+
         if(mListener !=null){
             convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemClike(v,currPosition);
+                }
+            });
+            views[1].setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemClike(v,currPosition);
+                }
+            });
+            ((TextView)views[2]).setWidth(rightWidth/2);
+            views[2].setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     mListener.onItemClike(v,currPosition);

@@ -13,23 +13,37 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    private MyListView myListView;
+    private SwipeListView myListView;
     private SimpleAdapter simpleAdapter;
     private ArrayList<HashMap<String, String>> listData;
+    private final static int ITEM_RIGHT_WIDTH = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initData();
-        myListView = (MyListView) findViewById(R.id.listview);
+        myListView = (SwipeListView) findViewById(R.id.listview);
         myListView.addHeaderView(LayoutInflater.from(this).inflate(R.layout.hander,null));
+        myListView.setRightViewWidth(ITEM_RIGHT_WIDTH);
 
-        MyAdapter ma = new MyAdapter(this, R.layout.item, listData, new String[]{"textView", "button", "editText"}, new int[]{R.id.textView, R.id.button, R.id.editText});
+        String[] fromStr = {"item_right","text3","textView6","textView", "button", "editText","item_right"};
+        int[] toInt = {R.id.item_right,R.id.text3,R.id.textView6,R.id.imageView, R.id.textView, R.id.editText,R.id.button};
+        MyAdapter ma = new MyAdapter(this, R.layout.item, listData, fromStr, toInt);
+        ma.setRightWidth(ITEM_RIGHT_WIDTH);
         ma.setOnItemOncliclikListener(new MyAdapter.IOnItemRightClickListener() {
             @Override
             public void onItemClike(View v, int position) {
-                Toast.makeText(MainActivity.this,"点击了"+position +"项",Toast.LENGTH_SHORT).show();
+                switch (v.getId()){
+                    case R.id.text3:
+                        Toast.makeText(MainActivity.this,"点击了第"+position +"项编辑按钮",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.textView6:
+                        Toast.makeText(MainActivity.this,"点击了"+position +"项详细按钮",Toast.LENGTH_SHORT).show();
+                        break;
+                    default:Toast.makeText(MainActivity.this,"点击了"+position +"项",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         myListView.setAdapter(ma);
@@ -37,22 +51,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
         listData = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("id", "2");
+        map.put("name", "李四");
+        map.put("sex", "女");
+        map.put("age", "20");
+
         HashMap<String, String> map1 = new HashMap<String, String>();
-        map1.put("textView", "文本");
-        map1.put("button", "按钮");
-        map1.put("editText", "输入框");
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
-        listData.add(map1);
+        map1.put("id", "1");
+        map1.put("name", "张三");
+        map1.put("sex", "男");
+        map1.put("age", "19");
+
+        for (int i = 0; i < 100; i++) {
+            if(i%3 == 0){
+                listData.add(map);
+            }
+            listData.add(map1);
+        }
+
     }
 
 }
